@@ -1,0 +1,290 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* FusionCrafts Design System - Premium Futuristic Theme */
+
+@layer base {
+  :root {
+    /* Core Brand Colors */
+    --background: 0 0% 100%;
+    --foreground: 210 22% 22%;
+    
+    /* FusionCrafts Brand Palette */
+    --fusion-deep-blue: 221 83% 53%;     /* #1E3A8A equivalent in HSL */
+    --fusion-steel-grey: 211 26% 32%;    /* #374151 equivalent in HSL */
+    --fusion-bright-blue: 217 91% 60%;   /* #3B82F6 equivalent in HSL */
+    --fusion-glow: 217 91% 70%;
+    --fusion-glass: 217 91% 60% / 0.05;
+    
+    /* Semantic Colors */
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 217 91% 70%;
+    
+    --secondary: 211 26% 32%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+    
+    --muted: 220 14% 96%;
+    --muted-foreground: 211 26% 32%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 210 22% 22%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 22% 22%;
+    
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 217 91% 60%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    /* Glass & Glow Effects */
+    --glass-bg: 0 0% 100% / 0.1;
+    --glass-border: 217 91% 60% / 0.2;
+    --glow-primary: 0 0 40px hsl(217 91% 60% / 0.3);
+    --glow-secondary: 0 0 20px hsl(217 91% 60% / 0.2);
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 53%), hsl(217 91% 60%));
+    --gradient-glass: linear-gradient(135deg, 
+      hsl(0 0% 100% / 0.1), 
+      hsl(217 91% 60% / 0.05));
+    --gradient-hero: linear-gradient(135deg, 
+      hsl(221 83% 53% / 0.95), 
+      hsl(217 91% 60% / 0.9));
+    
+    /* Animation Timings */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-glow: box-shadow 0.3s ease-in-out;
+    
+    /* Spacing & Radius */
+    --radius: 1rem;
+    --radius-glass: 1.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+    cursor: none;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Components */
+  .glass {
+    background: var(--gradient-glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid hsl(var(--glass-border));
+    border-radius: var(--radius-glass);
+  }
+  
+  .glass-card {
+    @apply glass p-6 transition-all duration-300 hover:shadow-[0_8px_32px_0_hsl(var(--fusion-bright-blue)/0.2)];
+  }
+  
+  /* Glow Effects */
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+  
+  .glow-secondary {
+    box-shadow: var(--glow-secondary);
+  }
+  
+  /* Text Gradients */
+  .text-gradient-primary {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Custom Cursor */
+  .fusion-cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border: 2px solid hsl(var(--fusion-bright-blue));
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease-out;
+  }
+  
+  /* Animated Background */
+  .fusion-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .fusion-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, hsl(var(--fusion-bright-blue) / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(var(--fusion-deep-blue) / 0.1) 0%, transparent 50%);
+    animation: fusion-pulse 4s ease-in-out infinite;
+  }
+  
+  /* Navbar Styles */
+  .navbar-glass {
+    @apply glass fixed top-0 w-full z-50 backdrop-blur-xl;
+    background: hsl(var(--background) / 0.9);
+  }
+  
+  /* Hero Animations */
+  .fusion-orb {
+    width: 300px;
+    height: 300px;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  /* Custom Font Classes */
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* Fusion Animations */
+  @keyframes fusion-pulse {
+    0%, 100% { 
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% { 
+      opacity: 0.6;
+      transform: scale(1.1);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg); 
+    }
+    33% { 
+      transform: translateY(-20px) rotate(120deg); 
+    }
+    66% { 
+      transform: translateY(10px) rotate(240deg); 
+    }
+  }
+  
+  @keyframes fusion-glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px hsl(var(--fusion-bright-blue) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 0 40px hsl(var(--fusion-bright-blue) / 0.6);
+    }
+  }
+  
+  @keyframes slide-in-up {
+    0% {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-fusion-pulse {
+    animation: fusion-pulse 4s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-fusion-glow {
+    animation: fusion-glow 2s ease-in-out infinite;
+  }
+  
+  .animate-slide-in-up {
+    animation: slide-in-up 0.6s ease-out;
+  }
+}
