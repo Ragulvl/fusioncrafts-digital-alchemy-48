@@ -127,7 +127,7 @@ const AdminTeam = () => {
           <h2 className="font-orbitron font-bold text-2xl">Team Management</h2>
           <p className="text-muted-foreground">Manage team members and departments</p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <Button className="flex items-center space-x-2" onClick={() => alert('Add Member functionality will be implemented here!')}>
           <Plus className="h-4 w-4" />
           <span>Add Member</span>
         </Button>
@@ -183,10 +183,10 @@ const AdminTeam = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>View Profile</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Member</DropdownMenuItem>
-                      <DropdownMenuItem>Assign Project</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
+                      <DropdownMenuItem onClick={() => alert(`Viewing profile for ${member.name}`)}>View Profile</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => alert(`Editing ${member.name}`)}>Edit Member</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => alert(`Assigning project to ${member.name}`)}>Assign Project</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive" onClick={() => confirm(`Are you sure you want to remove ${member.name}?`)}>
                         Remove Member
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -271,7 +271,7 @@ const AdminTeam = () => {
                     <div className="text-sm text-muted-foreground">Team Members</div>
                   </div>
                   
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full" onClick={() => alert(`Viewing ${dept.name} department details`)}>
                     View Department
                   </Button>
                 </div>

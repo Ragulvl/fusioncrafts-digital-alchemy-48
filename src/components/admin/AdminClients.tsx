@@ -116,7 +116,7 @@ const AdminClients = () => {
           <h2 className="font-orbitron font-bold text-2xl">Client Management</h2>
           <p className="text-muted-foreground">Manage client relationships and information</p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <Button className="flex items-center space-x-2" onClick={() => alert('Add Client functionality will be implemented here!')}>
           <Plus className="h-4 w-4" />
           <span>Add Client</span>
         </Button>
@@ -159,10 +159,10 @@ const AdminClients = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>View Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Edit Client</DropdownMenuItem>
-                  <DropdownMenuItem>Send Message</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
+                  <DropdownMenuItem onClick={() => alert(`Viewing profile for ${client.name}`)}>View Profile</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => alert(`Editing ${client.name}`)}>Edit Client</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => alert(`Sending message to ${client.contactPerson}`)}>Send Message</DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive" onClick={() => confirm(`Are you sure you want to delete ${client.name}?`)}>
                     Delete Client
                   </DropdownMenuItem>
                 </DropdownMenuContent>

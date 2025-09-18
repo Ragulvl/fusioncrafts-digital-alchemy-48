@@ -99,7 +99,7 @@ const AdminProjects = () => {
           <h2 className="font-orbitron font-bold text-2xl">Projects Management</h2>
           <p className="text-muted-foreground">Manage and track all project progress</p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <Button className="flex items-center space-x-2" onClick={() => alert('New Project functionality will be implemented here!')}>
           <Plus className="h-4 w-4" />
           <span>New Project</span>
         </Button>
@@ -188,10 +188,10 @@ const AdminProjects = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>View Details</DropdownMenuItem>
-                      <DropdownMenuItem>Edit Project</DropdownMenuItem>
-                      <DropdownMenuItem>Update Status</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
+                      <DropdownMenuItem onClick={() => alert(`Viewing details for ${project.name}`)}>View Details</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => alert(`Editing ${project.name}`)}>Edit Project</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => alert(`Updating status for ${project.name}`)}>Update Status</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive" onClick={() => confirm(`Are you sure you want to delete ${project.name}?`)}>
                         Delete Project
                       </DropdownMenuItem>
                     </DropdownMenuContent>

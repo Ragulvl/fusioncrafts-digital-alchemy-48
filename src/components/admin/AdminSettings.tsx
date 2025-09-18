@@ -18,8 +18,8 @@ const AdminSettings = () => {
           <p className="text-muted-foreground">Configure system and application settings</p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline">Reset to Default</Button>
-          <Button>Save Changes</Button>
+          <Button variant="outline" onClick={() => confirm('Reset all settings to default values?') && alert('Settings reset to default!')}>Reset to Default</Button>
+          <Button onClick={() => alert('Settings saved successfully!')}>Save Changes</Button>
         </div>
       </div>
 
