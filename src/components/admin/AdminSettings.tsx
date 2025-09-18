@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Settings, User, Bell, Shield, Palette, Database, Mail, Globe } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,8 +9,29 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { toast } from "sonner";
 
 const AdminSettings = () => {
+  const [hasChanges, setHasChanges] = useState(false);
+
+  const handleSaveChanges = () => {
+    // Here you would typically save to a backend
+    toast.success('Settings saved successfully!');
+    setHasChanges(false);
+  };
+
+  const handleResetToDefault = () => {
+    if (confirm('Are you sure you want to reset all settings to default values? This action cannot be undone.')) {
+      // Here you would reset all form fields to default values
+      toast.success('Settings reset to default values!');
+      setHasChanges(false);
+    }
+  };
+
+  const handleInputChange = () => {
+    setHasChanges(true);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -18,8 +40,10 @@ const AdminSettings = () => {
           <p className="text-muted-foreground">Configure system and application settings</p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" onClick={() => confirm('Reset all settings to default values?') && alert('Settings reset to default!')}>Reset to Default</Button>
-          <Button onClick={() => alert('Settings saved successfully!')}>Save Changes</Button>
+          <Button variant="outline" onClick={handleResetToDefault}>Reset to Default</Button>
+          <Button onClick={handleSaveChanges} disabled={!hasChanges}>
+            Save Changes {hasChanges && '*'}
+          </Button>
         </div>
       </div>
 
@@ -54,15 +78,15 @@ const AdminSettings = () => {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="company-name">Company Name</Label>
-                  <Input id="company-name" defaultValue="FusionCraft Technologies" />
+                  <Input id="company-name" defaultValue="FusionCraft Technologies" onChange={handleInputChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="company-email">Primary Email</Label>
-                  <Input id="company-email" type="email" defaultValue="admin@fusioncraft.com" />
+                  <Input id="company-email" type="email" defaultValue="admin@fusioncraft.com" onChange={handleInputChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="company-phone">Phone Number</Label>
-                  <Input id="company-phone" defaultValue="+91 98765 43210" />
+                  <Input id="company-phone" defaultValue="+91 98765 43210" onChange={handleInputChange} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="company-address">Address</Label>

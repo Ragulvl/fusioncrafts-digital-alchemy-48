@@ -7,11 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import TeamMemberModal from './modals/TeamMemberModal';
+import ConfirmDialog from './modals/ConfirmDialog';
+import { toast } from "sonner";
 
 const AdminTeam = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [memberModalOpen, setMemberModalOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<any>(null);
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => {});
 
-  const teamMembers = [
+  const [teamMembers, setTeamMembers] = useState([
     {
       id: 'TM-001',
       name: 'Arun Sharma',
@@ -87,7 +94,7 @@ const AdminTeam = () => {
       avatar: '',
       experience: '4+ years'
     }
-  ];
+  ]);
 
   const departments = [
     { name: 'Development', count: 15, color: 'bg-blue-500' },
@@ -114,6 +121,32 @@ const AdminTeam = () => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const handleNewMember = () => {
+    setSelectedMember(null);
+    setMemberModalOpen(true);
+  };
+
+  const handleEditMember = (member: any) => {
+    setSelectedMember(member);
+    setMemberModalOpen(true);
+  };
+
+  const handleDeleteMember = (member: any) => {
+    setConfirmAction(() => () => {
+      setTeamMembers(teamMembers.filter(m => m.id !== member.id));
+      toast.success('Team member removed successfully!');
+    });
+    setConfirmDialogOpen(true);
+  };
+
+  const handleSaveMember = (member: any) => {
+    if (selectedMember) {
+      setTeamMembers(teamMembers.map(m => m.id === member.id ? member : m));
+    } else {
+      setTeamMembers([...teamMembers, member]);
+    }
+  };
+
   const filteredMembers = teamMembers.filter(member =>
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     member.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -127,7 +160,7 @@ const AdminTeam = () => {
           <h2 className="font-orbitron font-bold text-2xl">Team Management</h2>
           <p className="text-muted-foreground">Manage team members and departments</p>
         </div>
-        <Button className="flex items-center space-x-2" onClick={() => alert('Add Member functionality will be implemented here!')}>
+        <Button className="flex items-center space-x-2" onClick={handleNewMember}>
           <Plus className="h-4 w-4" />
           <span>Add Member</span>
         </Button>
@@ -183,10 +216,10 @@ const AdminTeam = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => alert(`Viewing profile for ${member.name}`)}>View Profile</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => alert(`Editing ${member.name}`)}>Edit Member</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => alert(`Assigning project to ${member.name}`)}>Assign Project</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive" onClick={() => confirm(`Are you sure you want to remove ${member.name}?`)}>
+                      <DropdownMenuItem onClick={() => toast.info(`Viewing profile for ${member.name}`)}>View Profile</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditMember(member)}>Edit Member</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => toast.info(`Assigning project to ${member.name}`)}>Assign Project</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteMember(member)}>
                         Remove Member
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -271,7 +304,7 @@ const AdminTeam = () => {
                     <div className="text-sm text-muted-foreground">Team Members</div>
                   </div>
                   
-                  <Button variant="outline" className="w-full" onClick={() => alert(`Viewing ${dept.name} department details`)}>
+                  <Button variant="outline" className="w-full" onClick={() => toast.info(`Viewing ${dept.name} department details`)}>
                     View Department
                   </Button>
                 </div>
@@ -280,6 +313,24 @@ const AdminTeam = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Modals */}
+      <TeamMemberModal
+        open={memberModalOpen}
+        onOpenChange={setMemberModalOpen}
+        member={selectedMember}
+        onSave={handleSaveMember}
+      />
+      
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        onOpenChange={setConfirmDialogOpen}
+        title="Remove Team Member"
+        description="Are you sure you want to remove this team member? This action cannot be undone."
+        onConfirm={confirmAction}
+        confirmText="Remove"
+        destructive
+      />
     </div>
   );
 };

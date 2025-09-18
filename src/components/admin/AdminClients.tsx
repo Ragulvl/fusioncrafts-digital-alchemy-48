@@ -6,11 +6,18 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import ClientModal from './modals/ClientModal';
+import ConfirmDialog from './modals/ConfirmDialog';
+import { toast } from "sonner";
 
 const AdminClients = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [clientModalOpen, setClientModalOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<any>(null);
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => {});
 
-  const clients = [
+  const [clients, setClients] = useState([
     {
       id: 'CLI-001',
       name: 'TechCorp Ltd',
@@ -86,7 +93,7 @@ const AdminClients = () => {
       joinDate: '2023-09-18',
       avatar: ''
     }
-  ];
+  ]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -103,6 +110,32 @@ const AdminClients = () => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
+  const handleNewClient = () => {
+    setSelectedClient(null);
+    setClientModalOpen(true);
+  };
+
+  const handleEditClient = (client: any) => {
+    setSelectedClient(client);
+    setClientModalOpen(true);
+  };
+
+  const handleDeleteClient = (client: any) => {
+    setConfirmAction(() => () => {
+      setClients(clients.filter(c => c.id !== client.id));
+      toast.success('Client deleted successfully!');
+    });
+    setConfirmDialogOpen(true);
+  };
+
+  const handleSaveClient = (client: any) => {
+    if (selectedClient) {
+      setClients(clients.map(c => c.id === client.id ? client : c));
+    } else {
+      setClients([...clients, client]);
+    }
+  };
+
   const filteredClients = clients.filter(client =>
     client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -116,7 +149,7 @@ const AdminClients = () => {
           <h2 className="font-orbitron font-bold text-2xl">Client Management</h2>
           <p className="text-muted-foreground">Manage client relationships and information</p>
         </div>
-        <Button className="flex items-center space-x-2" onClick={() => alert('Add Client functionality will be implemented here!')}>
+        <Button className="flex items-center space-x-2" onClick={handleNewClient}>
           <Plus className="h-4 w-4" />
           <span>Add Client</span>
         </Button>
@@ -159,10 +192,10 @@ const AdminClients = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => alert(`Viewing profile for ${client.name}`)}>View Profile</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => alert(`Editing ${client.name}`)}>Edit Client</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => alert(`Sending message to ${client.contactPerson}`)}>Send Message</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive" onClick={() => confirm(`Are you sure you want to delete ${client.name}?`)}>
+                  <DropdownMenuItem onClick={() => toast.info(`Viewing profile for ${client.name}`)}>View Profile</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleEditClient(client)}>Edit Client</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => toast.info(`Sending message to ${client.contactPerson}`)}>Send Message</DropdownMenuItem>
+                  <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteClient(client)}>
                     Delete Client
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -223,6 +256,24 @@ const AdminClients = () => {
           </Card>
         ))}
       </div>
+
+      {/* Modals */}
+      <ClientModal
+        open={clientModalOpen}
+        onOpenChange={setClientModalOpen}
+        client={selectedClient}
+        onSave={handleSaveClient}
+      />
+      
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        onOpenChange={setConfirmDialogOpen}
+        title="Delete Client"
+        description="Are you sure you want to delete this client? This action cannot be undone."
+        onConfirm={confirmAction}
+        confirmText="Delete"
+        destructive
+      />
     </div>
   );
 };

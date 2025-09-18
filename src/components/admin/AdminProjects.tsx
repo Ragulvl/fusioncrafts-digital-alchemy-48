@@ -7,12 +7,19 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ProjectModal from './modals/ProjectModal';
+import ConfirmDialog from './modals/ConfirmDialog';
+import { toast } from "sonner";
 
 const AdminProjects = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [projectModalOpen, setProjectModalOpen] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [confirmAction, setConfirmAction] = useState<() => void>(() => {});
 
-  const projects = [
+  const [projects, setProjects] = useState([
     {
       id: 'PRJ-001',
       name: 'E-commerce Platform',
@@ -68,7 +75,7 @@ const AdminProjects = () => {
       budget: '₹6,40,000',
       team: 'Team Alpha'
     }
-  ];
+  ]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -82,6 +89,32 @@ const AdminProjects = () => {
         return <Badge variant="destructive"><AlertCircle className="h-3 w-3 mr-1" />On Hold</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
+    }
+  };
+
+  const handleNewProject = () => {
+    setSelectedProject(null);
+    setProjectModalOpen(true);
+  };
+
+  const handleEditProject = (project: any) => {
+    setSelectedProject(project);
+    setProjectModalOpen(true);
+  };
+
+  const handleDeleteProject = (project: any) => {
+    setConfirmAction(() => () => {
+      setProjects(projects.filter(p => p.id !== project.id));
+      toast.success('Project deleted successfully!');
+    });
+    setConfirmDialogOpen(true);
+  };
+
+  const handleSaveProject = (project: any) => {
+    if (selectedProject) {
+      setProjects(projects.map(p => p.id === project.id ? project : p));
+    } else {
+      setProjects([...projects, project]);
     }
   };
 
@@ -99,7 +132,7 @@ const AdminProjects = () => {
           <h2 className="font-orbitron font-bold text-2xl">Projects Management</h2>
           <p className="text-muted-foreground">Manage and track all project progress</p>
         </div>
-        <Button className="flex items-center space-x-2" onClick={() => alert('New Project functionality will be implemented here!')}>
+        <Button className="flex items-center space-x-2" onClick={handleNewProject}>
           <Plus className="h-4 w-4" />
           <span>New Project</span>
         </Button>
@@ -188,10 +221,10 @@ const AdminProjects = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => alert(`Viewing details for ${project.name}`)}>View Details</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => alert(`Editing ${project.name}`)}>Edit Project</DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => alert(`Updating status for ${project.name}`)}>Update Status</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive" onClick={() => confirm(`Are you sure you want to delete ${project.name}?`)}>
+                      <DropdownMenuItem onClick={() => toast.info(`Viewing details for ${project.name}`)}>View Details</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEditProject(project)}>Edit Project</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => toast.info(`Updating status for ${project.name}`)}>Update Status</DropdownMenuItem>
+                      <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteProject(project)}>
                         Delete Project
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -202,6 +235,24 @@ const AdminProjects = () => {
           </TableBody>
         </Table>
       </Card>
+
+      {/* Modals */}
+      <ProjectModal
+        open={projectModalOpen}
+        onOpenChange={setProjectModalOpen}
+        project={selectedProject}
+        onSave={handleSaveProject}
+      />
+      
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        onOpenChange={setConfirmDialogOpen}
+        title="Delete Project"
+        description="Are you sure you want to delete this project? This action cannot be undone."
+        onConfirm={confirmAction}
+        confirmText="Delete"
+        destructive
+      />
     </div>
   );
 };
